@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reco Tracker</title>
+<style>
+:root{--bg:#f6f3ee;--card:#fff;--tx:#222;--mu:#6b6b6b;--br:#e2dccf;--ac:#c8780d;--ok:#1b7f3b;--okb:#d8f2e0;--bad:#b3261e;--badb:#fbdcd8;--wa:#8a5a00;--wab:#fff0c2;--in:#eee8dc;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150f;--card:#221f17;--tx:#eee8da;--mu:#a39b88;--br:#3a3526;--ok:#6fd08c;--okb:#17381f;--bad:#ff9a90;--badb:#4a1d19;--wa:#f2c35b;--wab:#43360f;--in:#2e2a1f;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17150f;--card:#221f17;--tx:#eee8da;--mu:#a39b88;--br:#3a3526;--ok:#6fd08c;--okb:#17381f;--bad:#ff9a90;--badb:#4a1d19;--wa:#f2c35b;--wab:#43360f;--in:#2e2a1f;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:14px/1.45 Arial,Helvetica,sans-serif}
+header{background:var(--ac);color:#fff;padding:14px 18px}h1{margin:0;font-size:19px}header p{margin:3px 0 0;font-size:12px}
+nav{display:flex;gap:2px;overflow-x:auto;background:var(--card);border-bottom:1px solid var(--br);padding:0 10px;position:sticky;top:0;z-index:5}
+nav button{background:none;border:0;border-bottom:3px solid transparent;color:var(--mu);padding:11px 16px;font:600 13px Arial;cursor:pointer;white-space:nowrap}nav button.on{color:var(--ac);border-color:var(--ac)}
+main{padding:16px;max-width:1200px;margin:auto}.tab{display:none}.tab.on{display:block}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}.k{background:var(--card);border:1px solid var(--br);border-radius:10px;padding:10px 12px;cursor:pointer}.k b{font-size:24px;display:block}.k span{color:var(--mu);font-size:12px}
+.card{background:var(--card);border:1px solid var(--br);border-radius:10px;padding:14px;margin-bottom:14px}.card h3{margin:0 0 10px;font-size:15px}
+.f{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:12.5px}th{background:var(--ac);color:#fff;text-align:left;padding:8px;white-space:nowrap}td{padding:7px 8px;border-bottom:1px solid var(--br);vertical-align:top}
+input,select,textarea{background:var(--in);color:var(--tx);border:1px solid var(--br);border-radius:6px;padding:7px 8px;font:13px Arial;max-width:100%}
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px}label{font-size:12px;color:var(--mu);display:block}label input,label select{width:100%;margin-top:3px}
+.b{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11.5px;font-weight:700;white-space:nowrap}.s-ok{background:var(--okb);color:var(--ok)}.s-bad{background:var(--badb);color:var(--bad)}.s-wa{background:var(--wab);color:var(--wa)}.s-pe{background:var(--in);color:var(--mu)}
+.btn{background:var(--ac);color:#fff;border:0;border-radius:6px;padding:8px 14px;font:600 13px Arial;cursor:pointer}.btn.g{background:var(--in);color:var(--tx)}.btn.s{padding:4px 9px;font-size:12px}.btn:disabled{opacity:.5;cursor:default}
+#bn{display:none;margin:12px 16px 0;padding:10px 12px;border-radius:8px;background:var(--wab);color:var(--wa);font-size:13px}#ts{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:9px 16px;border-radius:8px;display:none;z-index:9;max-width:90%}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--br);border-radius:12px;max-width:520px;width:92%}dialog::backdrop{background:#0008}.g2b{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px}.bar{display:grid;grid-template-columns:minmax(120px,210px) 1fr 70px;gap:8px;align-items:center;margin:7px 0;font-size:12px}.bar i{display:block;height:10px;background:var(--in);border-radius:6px;overflow:hidden}.bar i u{display:block;height:100%;background:var(--ok)}body:not(.in) header,body:not(.in) nav,body:not(.in) main,body:not(.in) #bn{display:none}body.in #auth{display:none}#auth .card{max-width:420px;margin:7vh auto}#auth label{margin-top:8px}#am{font-size:13px;margin:10px 0 0;min-height:18px}.chip{background:var(--in);color:var(--tx);border:1px solid var(--br);border-radius:16px;padding:5px 11px;font:12.5px Arial;cursor:pointer}.chip.on{background:var(--ac);color:#fff;border-color:var(--ac)}.cyc{text-align:center;cursor:pointer;min-width:96px;border:1px solid var(--br);font-size:12px}.cyc.o{background:var(--okb)}.cyc.b{background:var(--badb)}.cyc.w{background:var(--wab)}.cyc.x{cursor:default}.cyc.sel{outline:3px solid var(--ac);outline-offset:-3px}.cyc b{display:block;font-size:13px}.cyc small{color:var(--mu)}.info{background:var(--in);border-radius:8px;padding:10px;margin:10px 0;font-size:12.5px}
+
+body{font:15px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:12px 18px;background:linear-gradient(135deg,#c8780d,#a85f05)}
+header .br{display:flex;align-items:center;gap:10px}header .lg{font-size:26px}header h1{font-size:18px}header p{margin:0;font-size:12px;opacity:.9}
+header .hr{display:flex;gap:6px;align-items:center}.hb{background:#ffffff26;color:#fff;border:0;border-radius:18px;padding:6px 12px;font:600 12.5px inherit;cursor:pointer}.hb:hover{background:#ffffff40}
+nav{gap:4px;padding:6px 10px}nav button{border:0;border-radius:20px;padding:8px 14px;font:600 13px inherit;display:flex;gap:6px;align-items:center}nav button.on{background:var(--ac);color:#fff}nav .pill{background:var(--bad);color:#fff;border-radius:10px;padding:0 6px;font-size:11px}
+.card{border-radius:14px;box-shadow:0 1px 3px #0000000d}.btn{border-radius:8px;padding:9px 16px}.btn.s{padding:5px 10px}
+input,select,textarea{border-radius:8px;padding:9px 10px;font:14px inherit}
+.hello h2{margin:0;font-size:22px}.hello p{margin:2px 0 12px;color:var(--mu)}
+.sum{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0 16px}.sum div{background:var(--card);border:1px solid var(--br);border-radius:12px;padding:10px 16px;min-width:130px}.sum b{font-size:24px;display:block}.sum span{color:var(--mu);font-size:12px}
+.seg{display:inline-flex;background:var(--in);border-radius:20px;padding:3px;margin-bottom:6px}.seg button{border:0;background:none;border-radius:16px;padding:6px 14px;font:600 12.5px inherit;color:var(--mu);cursor:pointer}.seg button.on{background:var(--card);color:var(--tx);box-shadow:0 1px 3px #0002}
+.sec{margin:18px 0 8px;font-size:15px;font-weight:700}.sec small{color:var(--mu);font-weight:400}
+.it{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--br);border-left:5px solid var(--br);border-radius:12px;padding:12px 14px;margin-bottom:8px}.it.late{border-left-color:var(--bad)}.it.today{border-left-color:var(--wa)}.it.ok{border-left-color:var(--ok)}
+.it .im{flex:1;min-width:0}.it .mt{font-size:12px;color:var(--mu)}.it .dw{text-align:right;min-width:110px}
+.empty{background:var(--card);border:1px dashed var(--br);border-radius:12px;padding:18px;text-align:center;color:var(--mu)}
+.fs2{border:1px solid var(--br);border-radius:12px;padding:12px 14px;margin:0 0 12px}.fs2 legend{font-weight:700;font-size:13px;padding:0 6px}
+#afh{background:var(--wab);color:var(--wa);border-radius:8px;padding:8px 10px;margin:10px 0 0;font-size:13px}
+dialog{border-radius:16px;padding:18px;max-width:560px}dialog h3{margin:0 0 4px;font-size:18px}.dsub{color:var(--mu);font-size:12.5px;margin:0 0 12px}
+.help li{margin:8px 0}.help b{color:var(--ac)}
+#auth{min-height:100vh;background:linear-gradient(160deg,var(--bg),var(--in));padding:16px}#auth .card{border-radius:18px;padding:22px}
+@media(max-width:700px){nav{position:fixed;bottom:0;left:0;right:0;top:auto;border-top:1px solid var(--br);border-bottom:0;justify-content:space-around;padding:4px 2px calc(4px + env(safe-area-inset-bottom,0px));z-index:8}nav button{flex-direction:column;gap:0;padding:5px 6px;font-size:10.5px;border-radius:10px}nav .ic{font-size:18px}main{padding:12px 12px 90px}#ts{bottom:80px}.it{flex-wrap:wrap}.it .dw{text-align:left;min-width:0}header h1{font-size:16px}}
+.cyc{text-align:center;min-width:118px;border:2px solid transparent;border-radius:8px;background:var(--in);cursor:pointer;vertical-align:middle}.cyc b{display:block;font-size:12.5px}.cyc small{display:block;font-size:11px;color:var(--mu)}.cyc.o{background:var(--okb);color:var(--ok);cursor:default}.cyc.o small{color:var(--ok)}.cyc.b{background:var(--badb);color:var(--bad)}.cyc.w{background:var(--wab);color:var(--wa)}.cyc.sel{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac) inset}.cyc.x{opacity:.5;cursor:default}
+</style></head><body>
+<div id="auth"><div class="card"><h2 style="margin:0 0 4px">Reco Tracker &amp; Filler</h2><p style="margin:0 0 12px;color:var(--mu);font-size:12px">Sign in with your team account</p>
+<div class="f"><button class="btn" id="tl" type="button">Log in</button><button class="btn g" id="ts2" type="button">Sign up</button></div>
+
+<form id="lf"><label>Username<input id="lu" autocomplete="username" required></label><label>Password<input id="lp" type="password" autocomplete="current-password" required></label>
+<label style="display:flex;gap:6px;align-items:center"><input type="checkbox" id="lr" style="width:auto;margin:0" checked> Keep me signed in on this device</label><p style="margin:12px 0 0"><button class="btn">Log in</button></p></form>
+<form id="sf"><label>Your name<input id="sn" autocomplete="name" required></label><label>Username (letters, digits . _ - @)<input id="su" autocomplete="username" required></label><label>Password (8+ characters)<input id="sp" type="password" autocomplete="new-password" required></label><label>Confirm password<input id="sp2" type="password" autocomplete="new-password" required></label>
+<label>Name as it appears in “Prepared by” – start typing or tap your name(s) below<input id="sm" list="pbl" autocomplete="off" placeholder="e.g. Lavina and team"></label><datalist id="pbl"></datalist><div id="pbs" style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px"></div><label>Admin setup code (only for the first admin account)<input id="sc" type="password"></label><p style="margin:12px 0 0"><button class="btn">Request account</button></p></form>
+<div id="adw" style="margin-top:14px;border-top:1px solid var(--br);padding-top:10px"><a href="#" id="adl" style="font-size:12px;color:var(--mu)">⚙ Administrator: use a different sync link</a>
+<div id="adp" style="display:none;margin-top:8px"><label>Sync web app URL<input id="au" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+<p class="dsub" style="margin:8px 0 0">Only administrators can switch the link. It is saved on this device after you log in (or create the first admin) with an administrator account on that link; anyone else is returned to the current link.</p>
+<p class="dsub" id="aucur" style="margin:6px 0"></p><button class="btn s g" id="aud" type="button">Use the default link</button></div></div>
+<p id="am"></p></div></div>
+<header><div class="br"><span class="lg">📋</span><div><h1>Reco Tracker</h1><p id="hs">Reading the Google Sheet…</p></div></div><div class="hr"><button class="hb" id="hlp" type="button" title="How it works">? Help</button><button class="hb" id="who" type="button" title="My account"></button><button class="hb" id="lo" type="button">Log out</button></div></header>
+<nav id="nav"></nav><div id="bn"></div>
+<main>
+<section class="tab" id="t-home"></section>
+<section class="tab" id="t-db"><div class="kp" id="k2"></div><div class="g2b"><div class="card"><h3>Progress by report group</h3><div id="bg"></div></div><div class="card"><h3>Progress by owner</h3><div id="bo"></div></div></div></section>
+<section class="tab" id="t-us"><div class="card tw"><h3>Users – approve sign-ups and set permissions</h3><table><thead><tr><th>Username</th><th>Name</th><th>Match names</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody id="ub"></tbody></table><p style="color:var(--mu);font-size:12px">Members can fill only tasks whose Prepared by contains one of their match names. Viewers are read-only. Admins can do everything.</p></div></section>
+<section class="tab" id="t-tr">
+ <div class="kp" id="kp"></div>
+ <div class="f"><input type="search" id="q" placeholder="Search report…"><select id="fg"></select><select id="fo"></select><select id="fs"><option value="">All status</option><option>Overdue</option><option>Due today</option><option value="Pending">Upcoming</option><option value="Done">Done (any)</option><option value="On time">Done on time</option><option value="Late">Done late</option></select></div>
+ <div class="card tw"><table><thead><tr><th>#</th><th>Report</th><th>Group</th><th>Prepared by</th><th>Due</th><th>Days</th><th>Status</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+</section>
+<section class="tab" id="t-cy"></section>
+<section class="tab" id="t-fi">
+<div class="card" id="addc"><h3 style="font-size:18px">➕ Add a report</h3><p class="dsub">Tell us about a report you prepare. It appears in your Home list straight away.</p>
+ <fieldset class="fs2"><legend>1 · The report</legend><div class="g2"><label>Report name<input id="an" placeholder="e.g. Jaipur Flight"></label><label>Report group<input id="ag" list="gl" placeholder="Pick one or type a new group"></label></div></fieldset>
+ <fieldset class="fs2"><legend>2 · Who receives it</legend><div class="g2"><label>Sent to<input id="as" placeholder="e.g. Yadu, Amit sir"></label><label id="apl" style="display:none">Prepared by (admin only)<input id="ap" placeholder="Owner name"></label></div><p id="apm" class="dsub" style="margin:8px 0 0"></p></fieldset>
+ <fieldset class="fs2"><legend>3 · How often and by when</legend><div class="g2"><label>Frequency in a month<select id="af"><option>Monthly</option><option>Twice a month</option><option>Three times a month</option><option>Four times a month</option><option>Every 15 days</option><option>Daily</option><option>As per agreement</option></select></label>
+ <label id="arl" style="display:none"><span id="art">Days of the month</span><input id="ar" placeholder="e.g. 5, 11, 20, 26"></label><label>Next deadline date<input type="date" id="ad"></label></div><div id="afh"></div></fieldset>
+ <fieldset class="fs2"><legend>4 · Optional</legend><div class="g2"><label>Already done? Completion date<input type="date" id="ac"></label><label>Remark<input id="arm" placeholder="Anything worth noting"></label></div></fieldset>
+ <datalist id="gl"></datalist><button class="btn" id="sa" type="button">Add my report</button></div>
+</div>
+</section>
+<section class="tab" id="t-lg"><div class="f"><input type="search" id="lq" placeholder="Search log…"></div><div class="card tw"><table><thead><tr><th>Logged</th><th>#</th><th>Report</th><th>Prepared by</th><th>Due</th><th>Completed</th><th>Result</th><th>By</th><th>Remark</th><th>Entry</th></tr></thead><tbody id="lb"></tbody></table></div></section>
+</main><div id="ts"></div>
+<dialog id="md"><h3>✅ Mark as done</h3><p class="dsub">Choose the report and the date you finished it. The result (on time / late) is worked out for you.</p>
+ <div class="g2"><label>Report<select id="ft"></select></label><label>Which deadline?<select id="fc"></select></label><label>When did you finish?<input type="date" id="fd"></label><label>What do you want to do?<select id="fe"><option value="Done">Mark as done</option><option value="Reopened">Undo – reopen it</option></select></label><label>Recorded as<input id="fb" readonly></label><label>Remark (optional)<input id="fr" placeholder="Anything worth noting"></label></div>
+ <div class="info" id="fi"></div><div class="f" style="margin:0"><button class="btn" id="sv" type="button">Save</button><button class="btn g" id="mdx" type="button">Cancel</button></div></dialog>
+<dialog id="hd"><h3>👋 How this works</h3><p class="dsub">Three things you will do most:</p><ol class="help"><li><b>Home</b> shows what needs your attention, what is coming up, and what you finished recently. Press <b>Mark done</b> when a report is sent.</li><li>Reports that go out <b>several times a month</b> are in the <b>Cycles</b> tab – tick all the dates you finished and save once.</li><li>Missing a report? Use <b>Add report</b>. It is recorded under your name, and you can fill it straight away.</li></ol><p class="dsub">Colours: <b style="color:var(--ok)">green</b> done on time · <b style="color:var(--wa)">amber</b> due today · <b style="color:var(--bad)">red</b> late. A report moves to its next date a few days before it is due again.</p><button class="btn" id="hdx" type="button">Got it</button></dialog>
+<dialog id="acd"><h3>👤 My account</h3><p class="dsub" id="acn"></p><div class="g2"><label>Current password<input id="po" type="password" autocomplete="current-password"></label><label>New password (8+ characters)<input id="pn" type="password" autocomplete="new-password"></label><label>Repeat new password<input id="pn2" type="password" autocomplete="new-password"></label></div><div id="acu" style="display:none;border-top:1px solid var(--br);margin-top:12px;padding-top:10px"><label>Sync link (administrator)<input id="aurl" autocomplete="off"></label><p class="dsub" id="acl" style="margin:6px 0"></p><div class="f" style="margin:0 0 6px"><button class="btn s g" id="auo" type="button">Switch to this link…</button><button class="btn s g" id="aur" type="button">Reset to default</button></div></div>
+<p id="acm" class="dsub" style="margin:10px 0"></p><div class="f" style="margin:0"><button class="btn" id="acpw" type="button">Change password</button><button class="btn g" id="aclo" type="button">Log out</button><button class="btn g" id="acx" type="button">Close</button></div></dialog>
+<script>
+const $=i=>document.getElementById(i);
+const ALLOW_URL_OVERRIDE=false; /* Locked: all users must use the centrally configured default spreadsheet backend. */
+const DEFURL="https://script.google.com/macros/s/AKfycbwOsyaFdp4v02QG2ow4LJT_xuO5HChaCEIejwxquosKqPHYIrJAiw-neiVOaykgzp0/exec";
+const URLOK=/^https:\/\/script\.google\.com\/(a\/macros\/[\w.-]+\/|macros\/)s\/[\w-]+\/exec$/;
+let URLS=DEFURL,CAND=null,PREV=DEFURL;
+try{const o=localStorage.getItem("rtf2-url-admin");if(ALLOW_URL_OVERRIDE&&o&&URLOK.test(o))URLS=o}catch(e){}
+let TOKEN="",ME=null,US=[];
+
+let M=null,PM=null,TK=[],LG=[],DN={},ST={s:"wait"},cur="tr",FS="";
+const T0=(n=>new Date(n.getFullYear(),n.getMonth(),n.getDate()))(new Date());
+const pad=n=>String(n).padStart(2,"0"),iso=d=>d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate());
+const addD=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n),addM=(d,n)=>{const l=new Date(d.getFullYear(),d.getMonth()+n+1,0).getDate();return new Date(d.getFullYear(),d.getMonth()+n,Math.min(d.getDate(),l))};
+const fd=d=>d.toLocaleDateString("en-GB",{weekday:"short",day:"2-digit",month:"short"}),days=d=>Math.round((d-T0)/864e5);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const cell=(x,k)=>x[k]==null?"":String(x[k]).trim();
+function pdate(v){v=String(v).trim().replace(/^'/,"");let m=v.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);if(m)return new Date(+m[1],m[2]-1,+m[3]);m=v.match(/^(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4})$/);if(m)return new Date(+m[3],m[2]-1,+m[1]);return null}
+const nd=v=>{const d=pdate(v);return d?iso(d):String(v)};
+function nextOcc(t,d){const f=t.f.toLowerCase();
+ if(/four|three|twice/.test(f)){const s=[...new Set((t.r.match(/\d+/g)||[]).map(Number).filter(x=>x>0&&x<29))].sort((a,b)=>a-b);if(s.length){const n=s.find(x=>x>d.getDate());return n?new Date(d.getFullYear(),d.getMonth(),n):new Date(d.getFullYear(),d.getMonth()+1,s[0])}}
+ if(f.includes("15 days")||f.includes("agreement"))return addD(d,15);return addM(d,1)}
+const four=t=>!!(t.cyc&&t.cyc.length>1);
+const cyS=(t,d)=>{const k=DN[key(t,d)];if(k)return(k.c&&k.c>iso(d))?"Late":"On time";return d<T0?"Overdue":+d==+T0?"Due today":"Pending"};
+const dots=t=>{if(!four(t))return "";const b=cd(t),ref=new Date(b.getFullYear(),b.getMonth(),1);return " "+t.cyc.map((c,i)=>{const d=new Date(ref.getFullYear(),ref.getMonth()+(c.off-(t.cyc[0].off||0)),c.day),s=cyS(t,d);return `<span title="${fd(d)} · ${s}" style="color:${s=="On time"||s=="Late"?"var(--ok)":s=="Overdue"?"var(--bad)":"var(--mu)"}">${s=="On time"||s=="Late"?"●":"○"}</span>`}).join("")}
+let CY={y:T0.getFullYear(),m:T0.getMonth(),sel:{},c:iso(T0),r:""};
+const slots=t=>t.cyc.map(c=>new Date(CY.y,CY.m+c.off,c.day));
+function cycles(force){const el=$("t-cy");if(!el||(!force&&el.contains(document.activeElement)&&document.activeElement.tagName=="INPUT"))return;
+ const L=TK.filter(four),mn=new Date(CY.y,CY.m,1).toLocaleDateString("en-GB",{month:"long",year:"numeric"}),nc=Math.max(0,...L.map(t=>t.cyc.length));
+ const hd=[...Array(nc)].map((_,i)=>{const t=L.find(x=>x.cyc[i]);return t?`Statement ${esc(t.cyc[i].w)}<br><small>due ${ordn(t.cyc[i].day)}${t.cyc[i].off?" (next month)":""} ▾</small>`:""});
+ let tot=0,dn=0,ov=0;const colT=Array(nc).fill(0),colN=Array(nc).fill(0);
+ const rows=L.map(t=>{const can=canFill(t),sl=slots(t);let n=0;const cells=[...Array(nc)].map((_,i)=>{const x=sl[i];if(!x)return "<td></td>";const id=t.no+"|"+iso(x),s=cyS(t,x),k=DN[key(t,x)],lab=fd(x);tot++;colT[i]++;
+   if(k){dn++;colN[i]++;n++;return `<td class="cyc o"><b>${lab}</b><small>✔ done ${esc((k.c||"").slice(5).split("-").reverse().join("/"))}${s=="Late"?" · late":""}</small>${can&&(ME.role=="admin"||iso(x).slice(0,7)>=iso(T0).slice(0,7))?`<br><button class="btn s g" data-ro="${esc(id)}" title="Reopen">↺ undo</button>`:ME&&ME.role=="member"&&iso(x).slice(0,7)<iso(T0).slice(0,7)?`<br><small>🔒 Locked for members</small>`:""}</td>`}
+   if(s=="Overdue")ov++;const c=s=="Overdue"?"b":s=="Due today"?"w":"";return `<td class="cyc ${c}${CY.sel[id]?" sel":""}${can?"":" x"}" ${can?`data-sel="${esc(id)}"`:""}><b>${lab}</b><small>${s=="Pending"?"Upcoming":s}</small>${can?`<br>${CY.sel[id]?"☑ selected":"☐ tap to select"}`:""}</td>`}).join("");
+  return `<tr><td style="min-width:190px"><b>${esc(t.n)}</b><br><small style="color:var(--mu)">${esc(t.p)}</small></td>${cells}<td class="c"><span class="b ${n==sl.length?"s-ok":"s-pe"}">${n}/${sl.length}</span></td></tr>`}).join("");
+ const n=Object.keys(CY.sel).length;
+ el.innerHTML=`<div class="card"><h3>🔁 Several-times-a-month reports – ${mn} statements</h3><div class="f"><button class="btn g s" data-mv="-1" type="button">◀</button><b>${mn}</b><button class="btn g s" data-mv="1" type="button">▶</button><span style="color:var(--mu);font-size:12px">${dn}/${tot} cycles done${ov?` · <b style="color:var(--bad)">${ov} overdue</b>`:""}${tot?` · ${Math.round(100*dn/tot)}%`:""}</span></div>
+ <div class="tw"><table><thead><tr><th>Report</th>${hd.map((d,i)=>`<th class="c" data-col="${i}" style="cursor:pointer" title="Select every open cell in this column">Cycle ${i+1}<br>${d}</th>`).join("")}<th>Done</th></tr></thead><tbody>${rows||`<tr><td colspan="${nc+2}">No several-times-a-month reports found in the sheet.</td></tr>`}</tbody>
+ <tfoot><tr><td><b>Done per cycle</b></td>${colN.map((v,i)=>`<td class="c"><b>${v}/${colT[i]}</b></td>`).join("")}<td></td></tr></tfoot></table></div>
+ <div class="info" style="margin-top:12px">🔒 For members, a completed cycle in a previous month is locked and cannot be reopened or changed. Admins retain edit access.<br><br><b>${n}</b> cell${n==1?"":"s"} selected · tap cells (or a column heading) to select, then:
+ <div class="f" style="margin-top:8px"><label>Completed on<input type="date" id="cyd" value="${esc(CY.c)}"></label><label>Remark<input id="cyr" value="${esc(CY.r)}" placeholder="Optional"></label>
+ <button class="btn" id="cysv" ${n&&canFillAny()?"":"disabled"}>Save ${n||""} to Google Sheet</button><button class="btn g" id="cyall" type="button">Select all due / overdue</button><button class="btn g" id="cyclr" type="button">Clear</button></div></div></div>`}
+const canFillAny=()=>!!ME&&ME.role!="viewer";
+function selCol(i){TK.filter(four).forEach(t=>{const x=slots(t)[i];if(x&&canFill(t)&&!DN[key(t,x)])CY.sel[t.no+"|"+iso(x)]=1});cycles(true)}
+function selDue(){TK.filter(four).forEach(t=>slots(t).forEach(x=>{if(canFill(t)&&!DN[key(t,x)]&&x<=T0)CY.sel[t.no+"|"+iso(x)]=1}));cycles(true)}
+$("t-cy").addEventListener("input",e=>{if(e.target.id=="cyd")CY.c=e.target.value;if(e.target.id=="cyr")CY.r=e.target.value});
+async function wbulk(rows){try{const j=await api({action:"logs",token:TOKEN,rows});
+ if(!j.ok&&j.error=="action"){let n=0;for(const r of rows){const x=await api({action:"log",token:TOKEN,row:r});if(x.ok)n++;else if(x.error=="auth"){logout(ERR.auth);return -1}}return n}
+ if(!j.ok){if(j.error=="auth"){logout(ERR.auth);return -1}toast(ERR[j.error]||"Could not save");return 0}return j.saved??j.count??rows.length}catch(e){toast("Could not save – check the connection, then look in the Log before retrying");return 0}}
+async function saveSel(){const keys=Object.keys(CY.sel);if(!keys.length)return;if(!CY.c){toast("Choose the completion date");return}
+ const at=iso(new Date())+" "+new Date().toTimeString().slice(0,5),by=ME?(ME.name||ME.username):"",rows=[];
+ keys.forEach(k=>{const [no,due]=k.split("|"),t=TK.find(x=>x.no==no);if(t&&canFill(t))rows.push([at,t.no,t.n,t.g,t.p,due,CY.c,CY.c>due?"Late":"On time",by,CY.r.trim(),"Done"])});
+ const b=$("cysv");b.disabled=true;b.textContent="Saving…";const n=await wbulk(rows);if(n<0)return;toast(n==rows.length?"Saved "+n+" ✔":"Saved "+n+" of "+rows.length+" – check the Log");
+ if(n>0){rows.forEach(r=>LG.push({at:r[0],no:r[1],n:r[2],g:r[3],p:r[4],due:r[5],c:r[6],res:r[7],by:r[8],rm:r[9],e:"Done"}));rebuild()}CY.sel={};cycles(true);render();pull()}
+async function reopen(id){if(!confirm("Reopen this cycle (remove its completion)?"))return;const [no,due]=id.split("|"),t=TK.find(x=>x.no==no);if(!t)return;
+ const at=iso(new Date())+" "+new Date().toTimeString().slice(0,5);const ok=await w("log",[at,t.no,t.n,t.g,t.p,due,"","",ME?(ME.name||ME.username):"","","Reopened"],"Reopened ✔");if(ok){LG.push({at,no:t.no,n:t.n,g:t.g,p:t.p,due,c:"",res:"",by:"",rm:"",e:"Reopened"});rebuild();cycles(true)}}
+const mname=(m,p)=>{const h=String(p||"").toLowerCase();return String(m||"").split(/[,;\/]/).map(x=>x.trim().toLowerCase()).filter(x=>x.length>1).some(x=>h.includes(x))};
+const canFill=t=>!!ME&&(ME.role=="admin"||(ME.role=="member"&&mname(ME.match,t.p)));
+const key=(t,d)=>t.no+"|"+iso(d);
+function cd(t){if(t.daily)return T0;let d=t.dl;for(let n=0;n<80;n++){if(!DN[key(t,d)])break;const x=nextOcc(t,d);if(+x<=+d||x>addD(T0,3))break;d=x}return d}
+function stat(t){const d=cd(t),k=DN[key(t,d)];if(k)return(k.c&&k.c>iso(d))?"Late":"On time";return d<T0?"Overdue":+d==+T0?"Due today":"Pending"}
+const cls=s=>({"On time":"s-ok","Late":"s-bad","Overdue":"s-bad","Due today":"s-wa"}[s]||"s-pe"),badge=s=>`<span class="b ${cls(s)}">${({"Pending":"Upcoming","On time":"Done on time","Late":"Done late"})[s]||s}</span>`,isDone=s=>s=="On time"||s=="Late";
+const MON=["january","february","march","april","may","june","july","august","september","october","november","december"];
+function normF(x,n){x=String(x||"").toLowerCase();if(n>1)return n==2?"Twice a month":n==3?"Three times a month":"Four times a month";if(x.includes("daily")||x.includes("every day"))return "Daily";if(x.includes("agreement"))return "As per agreement";if(x.includes("15"))return "Every 15 days";if(x.includes("twice"))return "Every 15 days";return "Monthly"}
+function loadTasks(v){const out=[];let cur=null;
+ v.slice(1).forEach(x=>{if(!x||x.every(c=>!String(c==null?"":c).trim()))return;const no=cell(x,0);
+  if(no){cur={no,g:cell(x,1),n:cell(x,2),p:cell(x,3),s:cell(x,4),f0:cell(x,5),rm:cell(x,9),rows:[]};out.push(cur)}
+  if(!cur)return;const d=pdate(cell(x,8));cur.rows.push({w:cell(x,6),mo:cell(x,7).toLowerCase(),d,f:cell(x,5)})});
+ TK=out.filter(t=>t.g&&t.n).map(t=>{
+  const first=t.rows.length?t.rows[0].mo:"";let rs=t.rows.filter(r=>r.mo===first&&r.d);if(!rs.length)rs=t.rows.filter(r=>r.d);
+  const f=normF(t.f0,rs.length);t.f=f;t.daily=f=="Daily";t.dl=rs.length?new Date(Math.min(...rs.map(r=>+r.d))):T0;
+  if(rs.length>1){let off=0;t.cyc=rs.map((r,i)=>{if(i>0&&r.d.getDate()<rs[i-1].d.getDate())off++;return{w:r.w||"Cycle "+(i+1),day:r.d.getDate(),off}});t.r=rs.map(r=>ordn(r.d.getDate())).join(", ")}
+  else{t.cyc=null;t.r=f=="Monthly"?"By "+ordn(t.dl.getDate()):f=="Daily"?"Every day":f}
+  delete t.rows;delete t.f0;return t})}
+function loadLog(v){LG=v.slice(1).filter(x=>x&&cell(x,1)).map(x=>({at:cell(x,0),no:cell(x,1),n:cell(x,2),g:cell(x,3),p:cell(x,4),due:nd(cell(x,5)),c:nd(cell(x,6)),res:cell(x,7),by:cell(x,8),rm:cell(x,9),e:cell(x,10)||"Done"}));rebuild()}
+function rebuild(){DN={};LG.forEach(r=>{const k=r.no+"|"+r.due;if(r.e=="Reopened")delete DN[k];else DN[k]=r})}
+function toast(m){const e=$("ts");e.textContent=m;e.style.display="block";setTimeout(()=>e.style.display="none",4000)}
+function banner(){const b=$("bn");if(ST.s=="err"){b.style.display="block";b.textContent="Cannot reach the sync service. Showing the last data.";$("hs").textContent="Offline";return}
+ const v=ME&&ME.role=="viewer";b.style.display=v?"block":"none";if(v)b.textContent="View-only account – ask an admin to change your role to member so you can fill tasks.";
+ $("hs").textContent=ST.s=="ok"?"● Live from Google Sheet · "+TK.length+" tasks · "+LG.length+" log entries · checked "+new Date(ST.at).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):"Reading the Google Sheet…"}
+function opts(el,all,l,v){el.innerHTML=(all?`<option value="">${all}</option>`:"")+l.map(x=>`<option>${esc(x)}</option>`).join("");if(v!=null)el.value=v}
+function bars(key){const m={};TK.forEach(t=>(m[t[key]||"—"]=m[t[key]||"—"]||[]).push(t));
+ return Object.entries(m).map(([k,l])=>{const st=l.map(stat),d=st.filter(isDone).length,o=st.filter(x=>x=="Overdue").length;return `<div class="bar"><span>${esc(k)}</span><i><u style="width:${Math.round(100*d/l.length)}%"></u></i><span>${d}/${l.length}${o?` <b style="color:var(--bad)">⚠${o}</b>`:""}</span></div>`}).join("")||"No tasks yet."}
+function dash(){const st=TK.map(stat),n=x=>st.filter(s=>s==x).length,d=st.filter(isDone).length;
+ $("k2").innerHTML=[["Total tasks",TK.length,"","All"],["Completed",d,"var(--ok)","Done"],["On time",n("On time"),"var(--ok)","On time"],["Late",n("Late"),"var(--bad)","Late"],["Overdue",n("Overdue"),"var(--bad)","Overdue"],["Due today",n("Due today"),"var(--wa)","Due today"],["Pending",n("Pending"),"","Pending"],["Completion",TK.length?Math.round(100*d/TK.length)+"%":"–","","Done"]].map(([l,v,c,f])=>`<div class="k" data-s="${f}"><b style="color:${c||"inherit"}">${v}</b><span>${l}</span></div>`).join("");
+ $("bg").innerHTML=bars("g");$("bo").innerHTML=bars("p")}
+function render(){banner();dash();home();usersTab();cycles();const U=a=>[...new Set(a.filter(Boolean))],g=$("fg").value,o=$("fo").value;
+ opts($("fg"),"All groups",U(TK.map(t=>t.g)),g);opts($("fo"),"All owners",U(TK.map(t=>t.p)),o);$("gl").innerHTML=U(TK.map(t=>t.g)).map(x=>`<option value="${esc(x)}">`).join("");
+ const c={Overdue:0,"Due today":0,Pending:0,Done:0};TK.forEach(t=>{const s=stat(t);c[isDone(s)?"Done":s]++});
+ $("kp").innerHTML=[["Total",TK.length,""],["Overdue",c.Overdue,"var(--bad)"],["Due today",c["Due today"],"var(--wa)"],["Pending",c.Pending,""],["Done",c.Done,"var(--ok)"],["Completion",TK.length?Math.round(100*c.Done/TK.length)+"%":"–",""]].map(([l,n,col])=>`<div class="k" data-s="${l}"><b style="color:${col||"inherit"}">${n}</b><span>${l}</span></div>`).join("");
+ const q=$("q").value.toLowerCase(),s=$("fs").value,rows=TK.filter(t=>(!q||(t.n+t.g).toLowerCase().includes(q))&&(!$("fg").value||t.g==$("fg").value)&&(!$("fo").value||t.p==$("fo").value)&&(!s||(s=="Done"?isDone(stat(t)):stat(t)==s))).sort((a,b)=>cd(a)-cd(b)||a.no-b.no);
+ $("tb").innerHTML=rows.map(t=>{const d=cd(t),st=stat(t),action=four(t)?(canFill(t)?`<button class="btn s" data-go="cy" title="File each dated cycle in the Cycles tab">Open Cycles ↗</button>`:"<span class='dsub'>File in Cycles</span>"):(canFill(t)?`<button class="btn s ${isDone(st)?"g":""}" data-fill="${esc(t.no)}">${isDone(st)?"Edit":"Mark done"}</button>`:"");return `<tr><td>${esc(t.no)}</td><td><b>${esc(t.n)}</b></td><td>${esc(t.g)}</td><td>${esc(t.p)}</td><td>${t.daily?"Every day":fd(d)}${dots(t)}</td><td>${t.daily||isDone(st)?"":days(d)}</td><td>${badge(st)}</td><td>${action}</td></tr>`}).join("")||"<tr><td colspan=8>No tasks.</td></tr>";
+ const lq=$("lq").value.toLowerCase();$("lb").innerHTML=[...LG].reverse().filter(r=>!lq||(r.n+r.by+r.p).toLowerCase().includes(lq)).slice(0,300).map(r=>`<tr><td>${esc(r.at)}</td><td>${esc(r.no)}</td><td><b>${esc(r.n)}</b></td><td>${esc(r.p)}</td><td>${esc(r.due)}</td><td>${esc(r.c)}</td><td>${badge(r.res||"–")}</td><td>${esc(r.by)}</td><td>${esc(r.rm)}</td><td>${esc(r.e)}</td></tr>`).join("")||"<tr><td colspan=10>No entries yet.</td></tr>";
+ fillForm()}
+function usersTab(){if(!ME||ME.role!="admin"||$("ub").contains(document.activeElement))return;
+ const o=x=>["Approved","Pending","Blocked"].indexOf(x.status),op=(l,v)=>l.map(x=>`<option ${x==v?"selected":""}>${x}</option>`).join("");
+ $("ub").innerHTML=[...US].sort((a,b)=>(a.status=="Pending"?0:1)-(b.status=="Pending"?0:1)||a.username.localeCompare(b.username)).map(u=>`<tr style="${u.status=="Pending"?"background:var(--wab)":""}"><td>${esc(u.username)}</td><td>${esc(u.name)}</td><td><input class="um" value="${esc(u.match)}"></td><td><select class="ur">${op(["member","viewer","admin"],u.role)}</select></td><td><select class="us">${op(["Approved","Pending","Blocked"],u.status)}</select></td><td><button class="btn s" data-su="${esc(u.username)}" ${u.status=="Pending"?'data-ap="1"':""}>${u.status=="Pending"?"Approve":"Save"}</button></td></tr>`).join("")||"<tr><td colspan=6>No users yet.</td></tr>"}
+function fillForm(){const sel=$("ft"),v=sel.value;sel.innerHTML=[...TK].filter(canFill).sort((a,b)=>a.g.localeCompare(b.g)||a.no-b.no).map(t=>`<option value="${esc(t.no)}">${esc(t.no)} · ${esc(t.n)} (${esc(t.p)})</option>`).join("");if(FS)sel.value=FS;else if(v)sel.value=v;FS="";cyc()}
+function cyc(){const t=TK.find(x=>x.no==$("ft").value);if(!t){$("fc").innerHTML="";$("fi").textContent="";return}
+ const c=cd(t),prev=[];let a=t.dl;for(let n=0;n<60&&+a<+c;n++){prev.push(a);a=nextOcc(t,a)}const l=[...prev.slice(-1),c,nextOcc(t,c)];const old=$("fc").value;
+ $("fc").innerHTML=[...new Set(l.map(iso))].map(x=>`<option value="${x}">${fd(pdate(x))}${x==iso(c)?" (current)":""}${DN[t.no+"|"+x]?" ✔":""}</option>`).join("");$("fc").value=iso(c);
+ if(old&&[...$("fc").options].some(o=>o.value==old))$("fc").value=old;info()}
+function info(){info0();const t=TK.find(x=>x.no==$("ft").value);if(t&&four(t))$("fi").insertAdjacentHTML("beforeend",'<br><button class="btn s g" id="gocy" type="button">Open the 4-cycle grid – fill several cycles at once</button>')}
+function info0(){const t=TK.find(x=>x.no==$("ft").value);if(!t)return;const due=$("fc").value,k=DN[t.no+"|"+due],c=$("fd").value;
+ const res=c?(c>due?"Late":"On time"):"–";$("fi").innerHTML=`<b>${esc(t.g)}</b> · prepared by ${esc(t.p)} · sent to ${esc(t.s)}<br>Rule: ${esc(t.r)} · due <b>${due}</b> · result if saved now: ${badge(res)}${k?`<br>Already recorded on ${esc(k.c)} by ${esc(k.by||"–")}`:""}${t.rm?`<br><span style="color:var(--mu)">${esc(t.rm)}</span>`:""}`}
+async function w(action,row,label){try{const j=await api({action,token:TOKEN,row});if(!j.ok){if(j.error=="auth"){logout(ERR.auth);return false}toast(ERR[j.error]||"Could not save");return false}toast(label);pull();return true}
+ catch(e){toast("Could not save – check the connection, then look in the Log before retrying");return false}}
+async function save(){const t=TK.find(x=>x.no==$("ft").value),by=$("fb").value.trim(),due=$("fc").value,c=$("fd").value,e=$("fe").value;
+ if(!t||!by||(e=="Done"&&!c)){toast("Pick a task, completion date and enter your name");return}
+ try{localStorage.setItem("rtf-name",by)}catch(x){}const res=e=="Done"?(c>due?"Late":"On time"):"";const at=iso(new Date())+" "+new Date().toTimeString().slice(0,5);
+ $("sv").disabled=true;const ok=await w("log",[at,t.no,t.n,t.g,t.p,due,e=="Done"?c:"",res,by,$("fr").value.trim(),e],e=="Done"?"Saved ✔":"Reopened ✔");
+ $("sv").disabled=false;if(ok){LG.push({at,no:t.no,n:t.n,g:t.g,p:t.p,due,c:e=="Done"?c:"",res,by,rm:$("fr").value.trim(),e});rebuild();$("fr").value="";$("md").close();render()}}
+const TM={"Twice a month":2,"Three times a month":3,"Four times a month":4};
+function freqUi0(){const k=TM[$("af").value]||0;$("arl").style.display=k?"block":"none";if(k)$("art").textContent="Days of the month ("+k+" dates)";$("ar").placeholder=k==2?"e.g. 10, 25":k==3?"e.g. 7, 15, 25":"e.g. 5, 11, 20, 26"}
+function freqUi(){const f=$("af").value,k=TM[f]||0;$("arl").style.display=k?"block":"none";if(k){$("art").textContent="Due days, in cycle order ("+k+" days)";$("ar").placeholder="e.g. "+(k==2?"10, 25":k==3?"7, 15, 25":"5, 11, 20, 26")}
+ const u=[];($("ar").value.match(/\d+/g)||[]).map(Number).forEach(x=>{if(x>=1&&x<=28&&!u.includes(x))u.push(x)}),dl=$("ad").value;let h;
+ if(k)h=u.length==k?"Due on the "+u.map(ordn).join(", ")+" – in this order (a smaller day means next month). Cycle windows are set automatically.":"List "+k+" different days between 1 and 28 in cycle order, e.g. 11, 20, 26, 5. The first must be your deadline day.";
+ else if(f=="Monthly")h=dl?"Due on the "+ordn(+dl.slice(8))+" of every month.":"Pick the deadline date – it repeats on the same day every month.";
+ else if(f=="Every 15 days")h="Repeats every 15 days from the deadline date.";else if(f=="Daily")h="Due every day.";else h="Repeats 15 days after the deadline date.";
+ $("afh").textContent="📅 "+h}
+async function addTask(){const g=$("ag").value.trim(),n=$("an").value.trim(),dl=$("ad").value,c=$("ac").value,f=$("af").value,k=TM[f]||0;
+ if(!g||!n||!dl){toast("Report, report group and deadline date are required");return}
+ if(c&&c<"2000"){toast("Check the completion date");return}
+ let rule="";if(k){const u=[];($("ar").value.match(/\d+/g)||[]).map(Number).forEach(x=>{if(x>=1&&x<=28&&!u.includes(x))u.push(x)});if(u.length!=k){toast("List exactly "+k+" different days (1–28) in cycle order");return}if(u[0]!=+dl.slice(8)){toast("The first day in the list must be the day of your deadline date");return}rule=u.join(", ")}
+ $("sa").disabled=true;let ok=false;
+ try{const j=await api({action:"report",token:TOKEN,group:g,report:n,sentTo:$("as").value.trim(),frequency:f,rule,deadline:dl,completedOn:c,remark:$("arm").value.trim(),preparedBy:$("ap").value.trim()});
+  if(j.ok){ok=true;toast("Report added ✔"+(c?" – completion recorded":""))}else if(j.error=="auth")logout(ERR.auth);else toast(ERR[j.error]||"Could not add the report")}catch(e){toast("Could not add – check the connection, then look at the Tracker before retrying")}
+ $("sa").disabled=false;if(ok){["ag","an","as","ar","ad","ac","arm","ap"].forEach(i=>$(i).value="");$("af").value="Monthly";freqUi();pull()}}
+let TABS=[];
+let PEND=0;const pendCount=()=>US.filter(u=>u.status=="Pending").length;
+function buildNav(){PEND=pendCount();TABS=[["home","Home","🏠"],["db","Overview","📊"],["tr","All reports","📋"],["cy","Cycles","🔁"]];if(!ME||ME.role!="viewer")TABS.push(["fi","Add report","➕"]);TABS.push(["lg","History","🕘"]);if(ME&&ME.role=="admin")TABS.push(["us","Users","👥"]);
+ $("nav").innerHTML="";TABS.forEach(([k,l,ic])=>{const b=document.createElement("button");b.dataset.k=k;b.type="button";b.innerHTML=`<span class="ic">${ic}</span><span class="lb">${l}</span>${k=="us"&&PEND?`<span class="pill">${PEND}</span>`:""}`;b.classList.toggle("on",k==cur);b.onclick=()=>go(k);$("nav").appendChild(b)})}
+function go(k){cur=k;TABS.forEach(([x])=>$("t-"+x).classList.toggle("on",x==k));[...$("nav").children].forEach(b=>b.classList.toggle("on",b.dataset.k==k));render()}
+["q","fg","fo","fs","lq"].forEach(i=>$(i).addEventListener("input",render));$("ft").onchange=()=>{$("fe").value="Done";cyc()};$("fc").onchange=info;$("fd").onchange=info;$("sv").onclick=save;$("sa").onclick=addTask;
+document.body.addEventListener("click",async e=>{
+ if(e.target.id=="gocy"){$("md").close();go("cy");return}
+ const cs=e.target.closest("[data-sel]");if(cs){const k=cs.dataset.sel;if(CY.sel[k])delete CY.sel[k];else CY.sel[k]=1;cycles(true);return}
+ const ro=e.target.closest("[data-ro]");if(ro){reopen(ro.dataset.ro);return}
+ const co=e.target.closest("[data-col]");if(co){selCol(+co.dataset.col);return}
+ const nv=e.target.closest("[data-mv]");if(nv){CY.m+=+nv.dataset.mv;if(CY.m<0){CY.m=11;CY.y--}if(CY.m>11){CY.m=0;CY.y++}CY.sel={};cycles(true);return}
+ if(e.target.id=="cyall"){selDue();return}if(e.target.id=="cyclr"){CY.sel={};cycles(true);return}if(e.target.id=="cysv"){saveSel();return}
+ const su=e.target.closest("[data-su]");if(su){const tr=su.closest("tr");su.disabled=true;try{const j=await api({action:"setuser",token:TOKEN,username:su.dataset.su,match:tr.querySelector(".um").value.trim(),role:tr.querySelector(".ur").value,status:su.dataset.ap?"Approved":tr.querySelector(".us").value});toast(j.ok?"Saved ✔":(ERR[j.error]||"Could not save"));if(j.ok)pull()}catch(x){toast("Could not save")}su.disabled=false;return}
+ const b=e.target.closest("[data-fill]");if(b){openDone(b.dataset.fill);return}
+ const sg=e.target.closest("[data-sc]");if(sg){SC=sg.dataset.sc;home();return}const gt=e.target.closest("[data-go]");if(gt){go(gt.dataset.go);return}
+ const k=e.target.closest("[data-s]");if(k){$("fs").value=k.dataset.s=="All"?"":k.dataset.s;if(cur!="tr")go("tr");else render()}});
+$("fd").value=iso(T0);try{$("fb").value=""}catch(e){}
+let SC="";const ordn=n=>n+(n%10==1&&n!=11?"st":n%10==2&&n!=12?"nd":n%10==3&&n!=13?"rd":"th");
+const rel=d=>{const n=days(d);return n<0?(-n)+" day"+(n<-1?"s":"")+" late":n==0?"Due today":n==1?"Tomorrow":"In "+n+" days"};
+function openDone(no){FS=no;fillForm();$("fd").value=iso(T0);$("fe").value="Done";$("fr").value="";$("fb").value=ME?(ME.name||ME.username):"";$("md").showModal()}
+function home(){if(cur!="home"||!ME)return;const hasMine=!!String(ME.match||"").trim(),sc=SC||(hasMine?"mine":"all"),mine=t=>mname(ME.match,t.p),list=sc=="mine"?TK.filter(mine):TK;
+ const h=new Date().getHours(),nm=String(ME.name||ME.username).split(" ")[0],it=list.map(t=>({t,d:cd(t),s:stat(t)}));
+ const att=it.filter(x=>x.s=="Overdue"||x.s=="Due today").sort((a,b)=>a.d-b.d),soon=it.filter(x=>x.s=="Pending"&&days(x.d)<=7&&!x.t.daily).sort((a,b)=>a.d-b.d),dn=it.filter(x=>isDone(x.s)).length;
+ const nos=new Set(list.map(t=>t.no)),rec=[...LG].reverse().filter(r=>r.e=="Done"&&nos.has(r.no)).slice(0,5);
+ const row=x=>{const late=x.s=="Overdue",tod=x.s=="Due today",ok=isDone(x.s);return `<div class="it ${late?"late":tod?"today":ok?"ok":""}"><div class="im"><b>${esc(x.t.n)}</b>${dots(x.t)}<div class="mt">${esc(x.t.g)} · sent to ${esc(x.t.s||"—")}</div></div><div class="dw"><span class="b ${late?"s-bad":tod?"s-wa":"s-pe"}">${rel(x.d)}</span><div class="mt">${x.t.daily?"Every day":fd(x.d)}</div></div>${canFill(x.t)?`<button class="btn" data-fill="${esc(x.t.no)}">Mark done</button>`:""}</div>`};
+ const seg=ME.role=="viewer"?"":`<div class="seg"><button data-sc="mine" class="${sc=="mine"?"on":""}">My reports</button><button data-sc="all" class="${sc=="all"?"on":""}">Everyone</button></div>`;
+ const none=sc=="mine"&&!list.length;
+ $("t-home").innerHTML=`<div class="hello"><h2>${h<12?"Good morning":h<17?"Good afternoon":"Good evening"}, ${esc(nm)} 👋</h2><p>${new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</p></div>${seg}
+ <div class="sum"><div><b style="color:${att.length?"var(--bad)":"var(--ok)"}">${att.length}</b><span>need attention</span></div><div><b>${soon.length}</b><span>coming up this week</span></div><div><b style="color:var(--ok)">${dn}</b><span>done this cycle</span></div></div>
+ ${none?`<div class="empty">No reports are linked to your name yet.<br><br><button class="btn" data-go="fi">➕ Add your first report</button> <button class="btn g" data-sc="all">See everyone's</button></div>`:`
+ <div class="sec">⚠️ Needs attention <small>overdue or due today</small></div>${att.map(row).join("")||'<div class="empty">🎉 You are all caught up.</div>'}
+ <div class="sec">📅 Coming up <small>next 7 days</small></div>${soon.map(row).join("")||'<div class="empty">Nothing due in the next 7 days.</div>'}
+ <div class="sec">✅ Recently done</div>${rec.map(r=>`<div class="it ok"><div class="im"><b>${esc(r.n)}</b><div class="mt">${esc(r.g)} · done ${esc(r.c||"")} by ${esc(r.by||"—")}</div></div><div class="dw"><span class="b ${r.res=="Late"?"s-bad":"s-ok"}">${r.res=="Late"?"Done late":"Done on time"}</span></div></div>`).join("")||'<div class="empty">Nothing completed yet.</div>'}`}
+ <p style="margin-top:16px"><button class="btn g" data-go="fi">➕ Add a report</button> <button class="btn g" data-go="cy">🔁 Fill several dates at once</button></p>`}
+function welcome(){if(!ME)return;const k="rtf-welcome-"+ME.username;try{if(localStorage.getItem(k))return;localStorage.setItem(k,"1")}catch(e){}$("hd").showModal()}
+function openAcct(){if(!ME)return;const adm=ALLOW_URL_OVERRIDE&&ME.role=="admin";$("acu").style.display=adm?"block":"none";if(adm){$("aurl").value=URLS;$("acl").textContent="Connected to the "+linkKind()+". Switching logs you out; log in again as an administrator on the new link."}$("acn").textContent=(ME.name||ME.username)+" · "+ME.role+(ME.match?" · linked to “"+ME.match+"”":"");$("acm").textContent="";$("acd").showModal()}
+const ERR={nomatch:"Ask an admin to link your name before adding reports",duplicate:"You already have a report with that name in this group",days:"Enter the right number of days of the month (1–28)",freq:"Choose a frequency",date:"Check the dates",credentials:"Wrong username or password",pending:"Your account is waiting for admin approval",blocked:"This account is blocked",locked:"Too many attempts – try again in 10 minutes",pastlocked:"This past-month entry is locked after completion. Ask an admin if a correction is required.",exists:"That username is already taken",admincode:"Wrong admin setup code",weak:"Password must be at least 8 characters",bad:"Check the fields (username: 3–40 letters, digits . _ - @)",auth:"Session expired – please log in again",forbidden:"You are not allowed to do that",task:"Not found",self:"You cannot change your own role or status",row:"Invalid entry",action:"Unknown request"};
+const api=async b=>{const r=await fetch(URLS,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(b)});return r.json()};
+const PB=["Lavina and team","Rohit Sawlani","Varun Sharma","Pranjal Gaharwar","Shubhika Pandey","Sunny / Yadu","Himesh Tilwani","Preeti Chauhan","Tapasya Jain","Manok Anandkar"];
+$("pbl").innerHTML=PB.map(n=>`<option value="${n}">`).join("");
+function pbChips(){const t=$("sm").value.split(",").map(x=>x.trim()),last=(t[t.length-1]||"").toLowerCase(),has=n=>t.includes(n);
+ $("pbs").innerHTML=PB.filter(n=>has(n)||!last||n.toLowerCase().includes(last)).map(n=>`<button type="button" class="chip${has(n)?" on":""}" data-pb="${n}">${n}</button>`).join("")||'<span style="font-size:12px;color:var(--mu)">No match in the list – your typed name will be used as entered.</span>'}
+$("sm").addEventListener("input",pbChips);
+$("pbs").onclick=e=>{const b=e.target.closest("[data-pb]");if(!b)return;const n=b.dataset.pb;let t=$("sm").value.split(",").map(x=>x.trim()).filter(Boolean);
+ if(t.includes(n))t=t.filter(x=>x!=n);else{const l=t[t.length-1];if(l&&!PB.includes(l)&&n.toLowerCase().includes(l.toLowerCase()))t.pop();t.push(n)}$("sm").value=t.join(", ");pbChips()};
+pbChips();
+const amsg=t=>$("am").textContent=t;
+function showTab(k){$("lf").style.display=k=="l"?"block":"none";$("sf").style.display=k=="s"?"block":"none";$("tl").className="btn"+(k=="l"?"":" g");$("ts2").className="btn"+(k=="s"?"":" g");amsg("")}
+function linkKind(){return URLS===DEFURL?"default link":"custom link (…"+URLS.slice(-14)+")"}
+function needUrl(){const v=ALLOW_URL_OVERRIDE?$("au").value.trim():"";CAND=null;if(!v)return true;if(!URLOK.test(v)){amsg("That does not look like a Google Apps Script web app link (it should end in /exec)");return false}if(v!==URLS){PREV=URLS;URLS=v;CAND=v}return true}
+function revertUrl(){if(CAND){URLS=PREV;CAND=null}}
+function okUrl(role){if(!CAND)return true;if(role=="admin"){try{if(CAND===DEFURL)localStorage.removeItem("rtf2-url-admin");else localStorage.setItem("rtf2-url-admin",CAND)}catch(e){}CAND=null;$("au").value="";showUrl();return true}
+ URLS=PREV;CAND=null;amsg("Only administrators can switch the sync link – this account is a "+role+". The current link is being used.");return false}
+function showUrl(){$("adw").style.display=ALLOW_URL_OVERRIDE?"block":"none";$("aucur").textContent="Currently using the "+linkKind()+"."}
+function store(t,rem){try{localStorage.removeItem("rtf2-tok");sessionStorage.removeItem("rtf2-tok");(rem?localStorage:sessionStorage).setItem("rtf2-tok",t)}catch(e){}}
+function logout(msg){TOKEN="";ME=null;try{localStorage.removeItem("rtf2-tok");sessionStorage.removeItem("rtf2-tok")}catch(e){}document.body.classList.remove("in");amsg(msg||"");$("lp").value=""}
+function enter(){document.body.classList.add("in");applyRole();go("home");pull();setTimeout(welcome,700)}
+function applyRole(){buildNav();$("who").textContent=ME?"👤 "+(ME.name||ME.username)+" · "+ME.role:"";$("addc").style.display=ME&&ME.role!="viewer"?"":"none";$("apl").style.display=ME&&ME.role=="admin"?"block":"none";$("apm").textContent=ME&&ME.role=="admin"?"As admin you can set Prepared by; leave it empty to use your own name.":ME&&ME.match?"Prepared by will be recorded as “"+String(ME.match).split(/[,;\/]/)[0].trim()+"” (your linked name).":"Ask an admin to link your name before adding reports.";$("fb").value=ME?(ME.name||ME.username):"";$("fb").disabled=true}
+async function pull(){if(!TOKEN)return;try{const j=await api({action:"data",token:TOKEN});if(!j.ok){if(j.error=="auth"){logout(ERR.auth);return}throw new Error(j.error)}
+ const was=ME&&ME.role;ME=j.me;US=j.users||[];if(ME.role=="admin"&&pendCount()!=PEND)buildNav();loadTasks(j.tasks||[]);loadLog(j.log||[]);ST={s:"ok",at:Date.now()};if(was!=ME.role)applyRole();else $("who").textContent="👤 "+(ME.name||ME.username)+" · "+ME.role}catch(e){ST={s:"err"}}render()}
+$("lf").onsubmit=async e=>{e.preventDefault();if(!needUrl())return;amsg("Signing in…");
+ try{const j=await api({action:"login",username:$("lu").value.trim(),password:$("lp").value});if(!j.ok){revertUrl();amsg(ERR[j.error]||"Could not log in");return}if(!okUrl(j.user.role))return;TOKEN=j.token;ME=j.user;store(j.token,$("lr").checked);amsg("");enter()}catch(x){revertUrl();amsg("Cannot reach the sync service at that link – try again or check the link")}};
+$("sf").onsubmit=async e=>{e.preventDefault();if(!needUrl())return;if($("sp").value!=$("sp2").value){amsg("Passwords do not match");return}amsg("Sending…");
+ try{const j=await api({action:"signup",name:$("sn").value.trim(),username:$("su").value.trim(),password:$("sp").value,match:$("sm").value.trim(),adminCode:$("sc").value});
+  if(!j.ok){revertUrl();amsg(ERR[j.error]||"Could not sign up");return}if(CAND&&!okUrl(j.status=="Approved"?"admin":"member"))return;$("lu").value=$("su").value.trim();showTab("l");amsg(j.status=="Approved"?"Admin account created – log in now.":"Request sent. An admin must approve your account before you can log in.")}catch(x){amsg("Cannot reach the sync service – try again shortly")}};
+$("af").onchange=freqUi;["ad","ar"].forEach(i=>$(i).addEventListener("input",freqUi));freqUi();$("hlp").onclick=()=>$("hd").showModal();$("hdx").onclick=()=>$("hd").close();$("mdx").onclick=()=>$("md").close();$("who").onclick=openAcct;$("acx").onclick=()=>$("acd").close();
+$("adl").onclick=e=>{e.preventDefault();$("adp").style.display=$("adp").style.display=="none"?"block":"none"};$("aud").onclick=()=>{try{localStorage.removeItem("rtf2-url-admin")}catch(e){}URLS=DEFURL;CAND=null;$("au").value="";showUrl();amsg("Using the default link.")};
+$("auo").onclick=()=>{const v=$("aurl").value.trim();if(!URLOK.test(v)){$("acm").textContent="That does not look like a Google Apps Script web app link (…/exec)";return}if(v===URLS){$("acm").textContent="That is already the current link";return}$("acd").close();$("au").value=v;$("adp").style.display="block";logout("Log in as an administrator on the new link to finish switching.")};
+$("aur").onclick=()=>{try{localStorage.removeItem("rtf2-url-admin")}catch(e){}URLS=DEFURL;$("acd").close();$("au").value="";showUrl();logout("Back on the default link – please log in again.")};$("aclo").onclick=()=>{$("acd").close();logout("You are logged out.")};
+$("acpw").onclick=async()=>{const o=$("po").value,n=$("pn").value;if(!o||n.length<8){$("acm").textContent="Enter your current password and a new one of 8+ characters";return}if(n!=$("pn2").value){$("acm").textContent="The new passwords do not match";return}$("acm").textContent="Saving…";try{const j=await api({action:"pwd",token:TOKEN,old:o,new:n});if(j.ok){$("acm").textContent="Password changed ✔";["po","pn","pn2"].forEach(i=>$(i).value="")}else if(j.error=="auth"){$("acd").close();logout(ERR.auth)}else $("acm").textContent=j.error=="credentials"?"Your current password is wrong":(ERR[j.error]||"Could not change the password")}catch(e){$("acm").textContent="Could not reach the service – try again"}};$("tl").onclick=()=>showTab("l");$("ts2").onclick=()=>showTab("s");$("lo").onclick=()=>logout("You are logged out.");
+showTab("l");showUrl();
+setInterval(pull,60000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)pull()});
+try{TOKEN=localStorage.getItem("rtf2-tok")||sessionStorage.getItem("rtf2-tok")||""}catch(e){}
+if(TOKEN&&URLS)enter();
+</script></body></html>
